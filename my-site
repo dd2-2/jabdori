@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MiniWinTools - 무료 윈도우 미니앱</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #151922;
+      --panel-soft: #1b2130;
+      --text: #f4f7fb;
+      --muted: #9aa4b2;
+      --line: rgba(255,255,255,0.08);
+      --accent: #6ee7ff;
+      --accent-2: #8b5cf6;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(110,231,255,0.14), transparent 32%),
+        radial-gradient(circle at top right, rgba(139,92,246,0.18), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(16px);
+      background: rgba(11, 13, 16, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 30px rgba(110,231,255,0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 92px 0 72px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(44px, 7vw, 82px);
+      line-height: 0.95;
+      letter-spacing: -0.07em;
+    }
+
+    .lead {
+      margin: 24px 0 34px;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 19px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 14px;
+      font-weight: 750;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #071014;
+      box-shadow: 0 18px 50px rgba(110,231,255,0.18);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .mockup {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+    }
+
+    .window {
+      overflow: hidden;
+      border-radius: 22px;
+      background: #0f131b;
+      border: 1px solid var(--line);
+    }
+
+    .window-top {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.28);
+    }
+
+    .window-body {
+      padding: 24px;
+    }
+
+    .fake-line {
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      margin-bottom: 14px;
+    }
+
+    .fake-line.big {
+      height: 92px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(110,231,255,0.22), rgba(139,92,246,0.18));
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    .section-title {
+      margin-bottom: 24px;
+    }
+
+    .section-title h2 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -0.05em;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .meta {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .feature {
+      padding: 20px;
+      border-radius: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .feature strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .safety {
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(110,231,255,0.2);
+      background: linear-gradient(135deg, rgba(110,231,255,0.08), rgba(139,92,246,0.08));
+    }
+
+    .safety ul {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 36px 0 50px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 64px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .grid,
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="#">
+        <span class="logo-mark"></span>
+        <span>MiniWinTools</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#apps">Apps</a>
+        <a href="#why">Why</a>
+        <a href="#safety">Safety</a>
+        <a href="mailto:your@email.com">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">Windows 10 / 11 · Portable EXE</div>
+        <h1>무료 윈도우 미니앱.</h1>
+        <p class="lead">
+          설치 없이 바로 실행하는 작은 Windows 도구들입니다.
+          광고, 로그인, 복잡한 설정 없이 필요한 기능만 담았습니다.
+        </p>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="downloads/app1.zip" download>App 1 다운로드 · 1MB</a>
+          <a class="btn btn-ghost" href="downloads/app2.zip" download>App 2 다운로드 · 4MB</a>
+        </div>
+      </div>
+
+      <div class="mockup">
+        <div class="window">
+          <div class="window-top">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="window-body">
+            <div class="fake-line big"></div>
+            <div class="fake-line" style="width: 88%;"></div>
+            <div class="fake-line" style="width: 64%;"></div>
+            <div class="fake-line" style="width: 74%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="apps">
+      <div class="wrap">
+        <div class="section-title">
+          <h2>다운로드</h2>
+          <p>작고 가벼운 무료 Windows 앱 2개를 제공합니다.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>App 1 이름</h3>
+            <div class="meta">v1.0.0 · 1MB · Windows 10/11 · Portable</div>
+            <p>
+              여기에 App 1 설명을 적으세요. 예: 반복 작업을 빠르게 처리하는 작은 유틸리티입니다.
+            </p>
+            <a class="btn btn-primary" href="downloads/app1.zip" download>다운로드</a>
+          </article>
+
+          <article class="card">
+            <h3>App 2 이름</h3>
+            <div class="meta">v1.0.0 · 4MB · Windows 10/11 · Portable</div>
+            <p>
+              여기에 App 2 설명을 적으세요. 예: 파일이나 텍스트를 간단하게 정리하는 도구입니다.
+            </p>
+            <a class="btn btn-primary" href="downloads/app2.zip" download>다운로드</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="why">
+      <div class="wrap">
+        <div class="section-title">
+          <h2>가볍게 만들었습니다</h2>
+          <p>불필요한 기능을 줄이고 바로 실행할 수 있게 구성했습니다.</p>
+        </div>
+
+        <div class="features">
+          <div class="feature">
+            <strong>무설치</strong>
+            zip을 풀고 exe를 실행하면 됩니다.
+          </div>
+          <div class="feature">
+            <strong>무료</strong>
+            개인 사용자를 위한 무료 앱입니다.
+          </div>
+          <div class="feature">
+            <strong>로그인 없음</strong>
+            계정 생성이나 가입이 필요 없습니다.
+          </div>
+          <div class="feature">
+            <strong>광고 없음</strong>
+            앱 안에 광고를 넣지 않았습니다.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="safety">
+      <div class="wrap">
+        <div class="safety">
+          <h2>보안 안내</h2>
+          <p>
+            개인 개발자가 무료로 배포하는 Windows 앱입니다.
+            실행 시 Windows에서 “알 수 없는 게시자” 경고가 표시될 수 있습니다.
+          </p>
+          <ul>
+            <li>설치가 필요 없는 포터블 앱입니다.</li>
+            <li>불필요한 권한을 요구하지 않습니다.</li>
+            <li>가능하면 다운로드 파일의 SHA-256 해시값을 함께 공개하세요.</li>
+            <li>앱 업데이트 시 버전과 변경 내용을 이 페이지에 남기면 신뢰도가 올라갑니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      © 2026 MiniWinTools. Contact: your@email.com
+    </div>
+  </footer>
+</body>
+</html>
